@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_learning/providers/counter_state_provider.dart';
 
+//> https://riverpod.dev/docs/providers/state_provider
 class CounterScreen extends ConsumerStatefulWidget {
   const CounterScreen({super.key});
 
@@ -9,7 +11,6 @@ class CounterScreen extends ConsumerStatefulWidget {
 }
 
 class _CounterScreenState extends ConsumerState<CounterScreen> {
-  int _counter = 0;
   @override
   void initState() {
     super.initState();
@@ -22,6 +23,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final counter = ref.watch(counterStateProvider);
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA), // 柔和背景色
@@ -88,7 +90,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        '$_counter',
+                        '$counter',
                         style: theme.textTheme.displayMedium?.copyWith(
                           fontWeight: FontWeight.w700, // 適中
                           color: theme.primaryColor,
@@ -109,9 +111,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                       FloatingActionButton(
                         heroTag: 'decrement',
                         onPressed: () {
-                          setState(() {
-                            _counter--;
-                          });
+                          ref.read(counterStateProvider.notifier).state--;
                         },
                         backgroundColor: Colors.redAccent,
                         elevation: 4,
@@ -135,9 +135,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                       FloatingActionButton(
                         heroTag: 'increment',
                         onPressed: () {
-                          setState(() {
-                            _counter++;
-                          });
+                          ref.read(counterStateProvider.notifier).state++;
                         },
                         backgroundColor: Colors.green,
                         elevation: 4,
