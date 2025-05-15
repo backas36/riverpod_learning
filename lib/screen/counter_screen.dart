@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_learning/providers/counter_state_provider.dart';
+
+import '../providers/couter_notifier_provider.dart';
 
 //> https://riverpod.dev/docs/providers/state_provider
 class CounterScreen extends ConsumerStatefulWidget {
@@ -23,7 +24,8 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final counter = ref.watch(counterStateProvider);
+    //final counter = ref.watch(counterStateProvider);
+    final counter = ref.watch(counterNotifierProvider);
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA), // 柔和背景色
@@ -111,7 +113,10 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                       FloatingActionButton(
                         heroTag: 'decrement',
                         onPressed: () {
-                          ref.read(counterStateProvider.notifier).state--;
+                          //ref.read(counterStateProvider.notifier).state--;
+                          ref
+                              .read(counterNotifierProvider.notifier)
+                              .decrement();
                         },
                         backgroundColor: Colors.redAccent,
                         elevation: 4,
@@ -135,7 +140,10 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                       FloatingActionButton(
                         heroTag: 'increment',
                         onPressed: () {
-                          ref.read(counterStateProvider.notifier).state++;
+                          //ref.read(counterStateProvider.notifier).state++;
+                          ref
+                              .read(counterNotifierProvider.notifier)
+                              .increment();
                         },
                         backgroundColor: Colors.green,
                         elevation: 4,
@@ -144,6 +152,30 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                       const SizedBox(height: 10),
                       Text(
                         'Increase',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500, // 較細
+                          color: Colors.green,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 56),
+                  Column(
+                    children: [
+                      FloatingActionButton(
+                        heroTag: 'reset',
+                        onPressed: () {
+                          ref.read(counterNotifierProvider.notifier).reset();
+                        },
+                        backgroundColor: Colors.amber,
+                        elevation: 4,
+                        child: const Icon(Icons.refresh, size: 32),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Reset',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500, // 較細
