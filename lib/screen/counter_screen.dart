@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/couter_notifier_provider.dart';
+import '../providers/counter_async_notifier_provider.dart';
 
 //> https://riverpod.dev/docs/providers/state_provider
 class CounterScreen extends ConsumerStatefulWidget {
@@ -25,7 +25,8 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
   @override
   Widget build(BuildContext context) {
     //final counter = ref.watch(counterStateProvider);
-    final counter = ref.watch(counterNotifierProvider);
+    //final counter = ref.watch(counterNotifierProvider);
+    final counterAsync = ref.watch(counterAsyncNotifierProvider);
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA), // 柔和背景色
@@ -77,30 +78,36 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                     vertical: 32,
                     horizontal: 48,
                   ),
-                  child: Column(
-                    children: [
-                      Text(
-                        'You have pushed the button this many times:',
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: Colors.grey[600],
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400, // 更細
-                          height: 1.4,
-                          letterSpacing: 1.2,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        '$counter',
-                        style: theme.textTheme.displayMedium?.copyWith(
-                          fontWeight: FontWeight.w700, // 適中
-                          color: theme.primaryColor,
-                          fontSize: 54,
-                          letterSpacing: 4.0,
-                        ),
-                      ),
-                    ],
+                  child: counterAsync.when(
+                    data: (data) {
+                      return Column(
+                        children: [
+                          Text(
+                            'You have pushed the button this many times:',
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: Colors.grey[600],
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                              height: 1.4,
+                              letterSpacing: 1.2,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            '$data',
+                            style: theme.textTheme.displayMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: theme.primaryColor,
+                              fontSize: 54,
+                              letterSpacing: 4.0,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    error: (error, stack) => Text(error.toString()),
+                    loading: () => const CircularProgressIndicator(),
                   ),
                 ),
               ),
@@ -115,7 +122,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                         onPressed: () {
                           //ref.read(counterStateProvider.notifier).state--;
                           ref
-                              .read(counterNotifierProvider.notifier)
+                              .read(counterAsyncNotifierProvider.notifier)
                               .decrement();
                         },
                         backgroundColor: Colors.redAccent,
@@ -134,7 +141,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(width: 56),
+                  const SizedBox(width: 26),
                   Column(
                     children: [
                       FloatingActionButton(
@@ -142,7 +149,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                         onPressed: () {
                           //ref.read(counterStateProvider.notifier).state++;
                           ref
-                              .read(counterNotifierProvider.notifier)
+                              .read(counterAsyncNotifierProvider.notifier)
                               .increment();
                         },
                         backgroundColor: Colors.green,
@@ -161,13 +168,15 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(width: 56),
+                  const SizedBox(width: 26),
                   Column(
                     children: [
                       FloatingActionButton(
                         heroTag: 'reset',
                         onPressed: () {
-                          ref.read(counterNotifierProvider.notifier).reset();
+                          ref
+                              .read(counterAsyncNotifierProvider.notifier)
+                              .reset();
                         },
                         backgroundColor: Colors.amber,
                         elevation: 4,
@@ -179,7 +188,33 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500, // 較細
-                          color: Colors.green,
+                          color: Colors.amber,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 26),
+                  Column(
+                    children: [
+                      FloatingActionButton(
+                        heroTag: 'error',
+                        onPressed: () {
+                          ref
+                              .read(counterAsyncNotifierProvider.notifier)
+                              .beError();
+                        },
+                        backgroundColor: Colors.blueAccent,
+                        elevation: 4,
+                        child: const Icon(Icons.error, size: 32),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Error',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500, // 較細
+                          color: Colors.blueAccent,
                           letterSpacing: 1.2,
                         ),
                       ),
