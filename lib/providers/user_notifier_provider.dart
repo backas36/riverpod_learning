@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final userNotifierProvider = AutoDisposeNotifierProvider<UserNotifier, String>(
@@ -9,6 +12,28 @@ final userNotifierProvider = AutoDisposeNotifierProvider<UserNotifier, String>(
 class UserNotifier extends AutoDisposeNotifier<String> {
   @override
   String build() {
+    final keepAlive = ref.keepAlive();
+    Timer? timer;
+
+    log("UserNotifier build");
+
+    ref.onCancel(() {
+      log("UserNotifier onCancel");
+      timer = Timer(const Duration(seconds: 10), () {
+        keepAlive.close();
+        log("UserNotifier onCancel timer");
+      });
+    });
+
+    ref.onDispose(() {
+      timer?.cancel();
+      log("UserNotifier onDispose");
+    });
+
+    ref.onResume(() {
+      timer?.cancel();
+      log("UserNotifier onResume");
+    });
     return "-";
   }
 

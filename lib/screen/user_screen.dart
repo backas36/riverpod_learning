@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_learning/providers/user_notifier_provider.dart';
@@ -24,7 +22,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   void dispose() {
     super.dispose();
     _userController.dispose();
-    log("UserScreen dispose");
+    //log("UserScreen dispose");
   }
 
   @override
