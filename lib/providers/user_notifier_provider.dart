@@ -15,24 +15,24 @@ class UserNotifier extends AutoDisposeNotifier<String> {
     final keepAlive = ref.keepAlive();
     Timer? timer;
 
-    log("UserNotifier build");
+    log("1. UserNotifier build");
 
     ref.onCancel(() {
-      log("UserNotifier onCancel");
+      log("2.UserNotifier onCancel");
       timer = Timer(const Duration(seconds: 10), () {
         keepAlive.close();
-        log("UserNotifier onCancel timer");
+        log("5. UserNotifier onCancel timer");
       });
     });
 
     ref.onDispose(() {
       timer?.cancel();
-      log("UserNotifier onDispose");
+      log("3. UserNotifier onDispose");
     });
 
     ref.onResume(() {
       timer?.cancel();
-      log("UserNotifier onResume");
+      log("4. UserNotifier onResume");
     });
     return "-";
   }
@@ -41,3 +41,10 @@ class UserNotifier extends AutoDisposeNotifier<String> {
     state = value;
   }
 }
+
+// 從 A 頁面進入 user_screen 頁面  => 1 UserNotifier build
+// update 了 state 之後
+// 回到 A 頁面 => 2 UserNotifier onCancel
+// 10 秒內回到 user_screen 頁面 => 4 UserNotifier onResume
+// 再回到 A 頁面 => 2 UserNotifier onCancel
+// 10 秒後 => 5. UserNotifier onCancel timer, 3. UserNotifier onDispose
