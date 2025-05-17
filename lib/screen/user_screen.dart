@@ -1,21 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_learning/providers/user_notifier_provider.dart';
 
-class UserInputScreen extends ConsumerStatefulWidget {
-  const UserInputScreen({super.key});
+class UserScreen extends ConsumerStatefulWidget {
+  const UserScreen({super.key});
 
   @override
-  ConsumerState<UserInputScreen> createState() => _UserInputScreenState();
+  ConsumerState<UserScreen> createState() => _UserScreenState();
 }
 
-class _UserInputScreenState extends ConsumerState<UserInputScreen> {
+class _UserScreenState extends ConsumerState<UserScreen> {
   late TextEditingController _userController;
 
   @override
   void initState() {
     super.initState();
     _userController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _userController.dispose();
+    log("UserScreen dispose");
   }
 
   @override

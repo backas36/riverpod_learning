@@ -27,6 +27,7 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
     //final counter = ref.watch(counterStateProvider);
     //final counter = ref.watch(counterNotifierProvider);
     final counterAsync = ref.watch(counterAsyncNotifierProvider);
+
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA), // 柔和背景色

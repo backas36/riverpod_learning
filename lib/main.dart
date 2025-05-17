@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_learning/screen/user_input_screen.dart';
+import 'package:riverpod_learning/screen/user_screen.dart';
 
 import 'screen/counter_screen.dart';
 
@@ -19,11 +19,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const UserInputScreen(),
       initialRoute: '/counter',
       routes: {
         '/counter': (context) => const CounterScreen(),
-        '/user': (context) => const UserInputScreen(),
+        '/user': (context) => const UserScreen(),
       },
     );
   }
