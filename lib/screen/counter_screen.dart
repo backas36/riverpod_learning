@@ -237,6 +237,12 @@ class _CounterScreenState extends ConsumerState<CounterScreen> {
                   ),
                 ],
               ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/user');
+                },
+                child: const Text('Go to User Input'),
+              ),
             ],
           ),
         ),
