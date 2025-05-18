@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/user.dart';
@@ -6,6 +8,10 @@ import '../state/user_state.dart';
 class UserViewModel extends Notifier<UserState> {
   @override
   UserState build() {
+    log("UserViewModel build");
+    ref.onDispose(() {
+      log("UserViewModel dispose");
+    });
     return UserState(isLoading: true);
   }
 
