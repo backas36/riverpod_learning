@@ -41,27 +41,32 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
         email: _emailController.text,
       );
       ref.read(usersProvider.notifier).addUser(user);
-      log(user.toString());
     }
   }
 
   // > The listen method should not be called asynchronously, like inside an onPressed of an ElevatedButton. Nor should it be used inside initState and other State life-cycles.
   void _listener() {
-    ref.listen(usersProvider, (prev, next) {
-      if (next.isAdded) {
+    // > https://riverpod.dev/docs/advanced/select#filtering-widgetprovider-rebuild-using-select
+    ref.listen(usersProvider.select((state) => state.isAdded), (prev, next) {
+      if (next) {
         Navigator.pop(context);
         //Navigator.of(context).pop(); 只是語法一樣，功能跟上一行相同
       }
-      log(next.error ?? 'no error');
-      if (next.error != null) {
+    });
+
+    ref.listen(usersProvider.select((state) => state.error), (prev, next) {
+      log(next.toString());
+      if (next != null) {
         showDialog(
           context: context,
           builder:
               (context) => AlertDialog(
                 title: const Text('Error'),
-                content: Text(next.error!),
+                content: Text(next.toString()),
               ),
-        );
+        ).then((value) {
+          ref.read(usersProvider.notifier).clearError();
+        });
       }
     });
   }

@@ -13,10 +13,14 @@ class UserViewModel extends Notifier<UserState> {
     state = state.copyWith(isLoading: true, isAdded: false);
     state = state.copyWith(
       isLoading: false,
-      //isAdded: true,
-      error: 'Something went wrong',
+      isAdded: true,
+      //error: 'Something went wrong',  // mock error
       users: [...state.users, user],
     );
+  }
+
+  void clearError() {
+    state = state.copyWith(error: null);
   }
 }
 

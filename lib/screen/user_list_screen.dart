@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_learning/view_model/user_view_model.dart';
@@ -7,6 +9,7 @@ class UserListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    log("UserListScreen build");
     final usersViewModel = ref.watch(usersProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('User List Screen')),
