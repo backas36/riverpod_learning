@@ -6,6 +6,7 @@ import 'package:riverpod_learning/model/user.dart';
 
 import '../view_model/user_view_model.dart';
 
+//> https://riverpod.dev/docs/concepts/reading#using-reflisten-to-react-to-a-provider-change
 class AddUserScreen extends ConsumerStatefulWidget {
   const AddUserScreen({super.key});
 
@@ -44,11 +45,23 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
     }
   }
 
+  // > The listen method should not be called asynchronously, like inside an onPressed of an ElevatedButton. Nor should it be used inside initState and other State life-cycles.
   void _listener() {
     ref.listen(usersProvider, (prev, next) {
       if (next.isAdded) {
         Navigator.pop(context);
         //Navigator.of(context).pop(); 只是語法一樣，功能跟上一行相同
+      }
+      log(next.error ?? 'no error');
+      if (next.error != null) {
+        showDialog(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: const Text('Error'),
+                content: Text(next.error!),
+              ),
+        );
       }
     });
   }
