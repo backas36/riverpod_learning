@@ -14,16 +14,42 @@ class AddUserScreen extends ConsumerStatefulWidget {
   ConsumerState<AddUserScreen> createState() => _AddUserScreenState();
 }
 
-class _AddUserScreenState extends ConsumerState<AddUserScreen> {
+class _AddUserScreenState extends ConsumerState<AddUserScreen>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _idController;
   late TextEditingController _usernameController;
   late TextEditingController _ageController;
   late TextEditingController _emailController;
 
+  AnimationController? _animationController;
+  Animation<double>? _animation;
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+      //upperBound: 100.0,
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController!,
+      curve: Curves.easeIn,
+    );
+
+    _animationController!.forward();
+    _animationController!.addListener(() {
+      setState(() {});
+      //log("animation value: ${_animationController!.value}");
+    });
+    _animationController!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _animationController!.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _animationController!.forward();
+      }
+    });
+
     _idController = TextEditingController();
     _usernameController = TextEditingController();
     _ageController = TextEditingController();
@@ -38,6 +64,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
     _usernameController.dispose();
     _ageController.dispose();
     _emailController.dispose();
+    _animationController!.dispose(); // 如果沒有這行，會造成 memory leak
     super.dispose();
   }
 
@@ -120,11 +147,13 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                         border: OutlineInputBorder(),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: _animation!.value * 100),
                     ElevatedButton(
                       onPressed: _addUser,
                       child: const Text('Add User'),
                     ),
+                    const SizedBox(height: 24),
+                    Text('${_animationController!.value.toInt()}%'),
                   ],
                 ),
               ),
