@@ -145,21 +145,27 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
         age: int.parse(_ageController.text),
         email: _emailController.text,
       );
-      ref.read(usersProvider.notifier).addUser(user);
+      ref.read(userViewModelProvider.notifier).addUser(user);
     }
   }
 
   // > The listen method should not be called asynchronously, like inside an onPressed of an ElevatedButton. Nor should it be used inside initState and other State life-cycles.
   void _listener() {
     // > https://riverpod.dev/docs/advanced/select#filtering-widgetprovider-rebuild-using-select
-    ref.listen(usersProvider.select((state) => state.isAdded), (prev, next) {
+    ref.listen(userViewModelProvider.select((state) => state.isAdded), (
+      prev,
+      next,
+    ) {
       if (next) {
         Navigator.pop(context);
         //Navigator.of(context).pop(); 只是語法一樣，功能跟上一行相同
       }
     });
 
-    ref.listen(usersProvider.select((state) => state.error), (prev, next) {
+    ref.listen(userViewModelProvider.select((state) => state.error), (
+      prev,
+      next,
+    ) {
       log(next.toString());
       if (next != null) {
         showDialog(
@@ -170,7 +176,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                 content: Text(next.toString()),
               ),
         ).then((value) {
-          ref.read(usersProvider.notifier).clearError();
+          ref.read(userViewModelProvider.notifier).clearError();
         });
       }
     });
@@ -178,7 +184,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
 
   void _listenerManual() {
     // > https://riverpod.dev/docs/advanced/select#filtering-widgetprovider-rebuild-using-select
-    ref.listenManual(usersProvider.select((state) => state.isAdded), (
+    ref.listenManual(userViewModelProvider.select((state) => state.isAdded), (
       prev,
       next,
     ) {
@@ -197,7 +203,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
       }
     });
 
-    ref.listenManual(usersProvider.select((state) => state.error), (
+    ref.listenManual(userViewModelProvider.select((state) => state.error), (
       prev,
       next,
     ) {
@@ -211,7 +217,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                 content: Text(next.toString()),
               ),
         ).then((value) {
-          ref.read(usersProvider.notifier).clearError();
+          ref.read(userViewModelProvider.notifier).clearError();
         });
       }
     });

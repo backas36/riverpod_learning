@@ -14,13 +14,15 @@ class UserDetailScreen02 extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
         // 如果要在 StatelessWidget 中使用 ref, 則需要用 Consumer 來 Wrap
-        final users = ref.watch(usersProvider.select((state) => state.users));
+        final users = ref.watch(
+          userViewModelProvider.select((state) => state.users),
+        );
         return Column(
           children: [
             ElevatedButton(
               onPressed: () {
                 ref
-                    .read(usersProvider.notifier)
+                    .read(userViewModelProvider.notifier)
                     .addUser(
                       User(
                         id: 1,
@@ -49,7 +51,9 @@ class UserDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // ConsumerWidget 只能在這裡取得 ref, 如果是 ConsumerStatefulWidget 可以在 build 外面取得 ref
-    final users = ref.watch(usersProvider.select((state) => state.users));
+    final users = ref.watch(
+      userViewModelProvider.select((state) => state.users),
+    );
 
     return Column(
       children: [

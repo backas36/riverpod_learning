@@ -10,7 +10,8 @@ class UserListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     log("UserListScreen build");
-    final usersViewModel = ref.watch(usersProvider);
+    final usersViewModel = ref.watch(userViewModelProvider);
+    log(usersViewModel.toString());
     return Scaffold(
       appBar: AppBar(title: const Text('User List Screen')),
       body:
