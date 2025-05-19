@@ -184,12 +184,12 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
     ) {
       if (next) {
         //> https://riverpod.dev/docs/essentials/faq#what-is-the-difference-between-refrefresh-and-refinvalidate
-        //ref.invalidate(usersProvider);
-        final state = ref.refresh(usersProvider);
-        log(state.toString());
+        //ref.invalidate(userViewModelProvider);
+        //final state = ref.refresh(userViewModelProvider);
+        //log(state.toString());
 
-        /* ref.invalidate(usersProvider)
-          final newValue = ref.read(usersProvider)
+        /* ref.invalidate(userViewModelProvider)
+          final newValue = ref.read(userViewModelProvider)
           這兩行組起來就等於是 ref.refresh(userProvider)
         */
         //Navigator.pop(context);
