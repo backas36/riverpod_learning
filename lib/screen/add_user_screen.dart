@@ -23,7 +23,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen>
   late TextEditingController _emailController;
 
   AnimationController? _animationController;
-  Animation<double>? _animation;
+  Animation<Color?>? _animation;
   @override
   void initState() {
     super.initState();
@@ -32,22 +32,15 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen>
       duration: const Duration(seconds: 1),
       //upperBound: 100.0,
     );
-    _animation = CurvedAnimation(
-      parent: _animationController!,
-      curve: Curves.easeIn,
-    );
+    _animation = ColorTween(
+      begin: Colors.yellow,
+      end: Colors.amber[400],
+    ).animate(_animationController!);
 
     _animationController!.forward();
     _animationController!.addListener(() {
       setState(() {});
       //log("animation value: ${_animationController!.value}");
-    });
-    _animationController!.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _animationController!.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _animationController!.forward();
-      }
     });
 
     _idController = TextEditingController();
@@ -73,6 +66,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen>
     //_listener(); // ref.listen 建議只在 build 中使用 (在這個練習 case 中， listenManual 跟 listen 效果相同，但是只能選一個來執行)
 
     return Scaffold(
+      backgroundColor: _animation!.value,
       appBar: AppBar(title: const Text('Add User Screen')),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -147,7 +141,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen>
                         border: OutlineInputBorder(),
                       ),
                     ),
-                    SizedBox(height: _animation!.value * 100),
+                    SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: _addUser,
                       child: const Text('Add User'),
