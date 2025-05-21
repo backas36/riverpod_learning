@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/user.dart';
+import '../service/fetch_user.dart';
 import '../state/user_state.dart';
 
 // > this is not using riverpod_annotation way. But it works.
@@ -64,5 +65,11 @@ class UserViewModel extends _$UserViewModel {
 
   void clearError() {
     state = state.copyWith(error: null);
+  }
+
+  Future<void> fetchUsers() async {
+    log(" fetchUsers 被呼叫");
+    final users = await ref.read(fetchUserProvider).fetchUsers();
+    state = state.copyWith(isLoading: false, users: users);
   }
 }

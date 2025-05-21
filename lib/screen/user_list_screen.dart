@@ -4,14 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_learning/view_model/user_view_model.dart';
 
-class UserListScreen extends ConsumerWidget {
+class UserListScreen extends ConsumerStatefulWidget {
   const UserListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<UserListScreen> createState() => _UserListScreenState();
+}
+
+class _UserListScreenState extends ConsumerState<UserListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    log("UserListScreen initState");
+    // addPostFrameCallback is called after the build method is called
+    // 使用 addPostFrameCallback 可以確保 fetchUsers() 在 widget 完全建立後，下一幀開始前執行，避免不必要的重建。
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.read(userViewModelProvider.notifier).fetchUsers();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     log("UserListScreen build");
     final usersViewModel = ref.watch(userViewModelProvider);
-    log(usersViewModel.toString());
     return Scaffold(
       appBar: AppBar(title: const Text('User List Screen')),
       body:
