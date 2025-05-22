@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_learning/view_model/user_view_model.dart';
 
+import '../providers/user_list_provider.dart';
+
 class UserListScreen extends ConsumerStatefulWidget {
   const UserListScreen({super.key});
 
@@ -27,6 +29,11 @@ class _UserListScreenState extends ConsumerState<UserListScreen> {
   Widget build(BuildContext context) {
     log("UserListScreen build");
     final usersViewModel = ref.watch(userViewModelProvider);
+    final user = ref.watch(userListProvider(1, 20));
+    final user2 = ref.watch(userListProvider(3, 22, username: 'Jim'));
+
+    log("user: $user");
+    log("user2: $user2");
     return Scaffold(
       appBar: AppBar(title: const Text('User List Screen')),
       body:
