@@ -5,6 +5,7 @@ import 'package:riverpod_learning/screen/user_screen.dart';
 import 'screen/add_user_screen.dart';
 import 'screen/counter_screen.dart';
 import 'screen/future_user_screen.dart';
+import 'screen/stream_user_screen.dart';
 import 'screen/user_list_screen.dart';
 
 void main() {
@@ -22,13 +23,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/future_user',
+      initialRoute: '/stream_user',
       routes: {
         '/counter': (context) => const CounterScreen(),
         '/user': (context) => const UserScreen(),
         '/user_list': (context) => const UserListScreen(),
         '/add_user': (context) => const AddUserScreen(),
         '/future_user': (context) => const FutureUserScreen(),
+        '/stream_user': (context) => const StreamUserScreen(),
       },
     );
   }
