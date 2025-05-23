@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -29,14 +31,27 @@ class _StreamUserScreenState extends ConsumerState<StreamUserScreen> {
       body: users.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (data) {
-          usersList.addAll(data);
+          usersList.add(data);
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
+            if (_scrollController.hasClients) {
+              final double tolerance =
+                  _scrollController.position.viewportDimension * 0.2;
+
+              final isAtBottom =
+                  (_scrollController.position.maxScrollExtent -
+                      _scrollController.offset) <=
+                  tolerance;
+
+              log('isAtBottom: $isAtBottom');
+              if (isAtBottom) {
+                _scrollController.animateTo(
+                  _scrollController.position.maxScrollExtent,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+            }
           });
 
           return ListView.builder(
