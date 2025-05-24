@@ -5,6 +5,7 @@ import 'package:riverpod_learning/screen/user_screen.dart';
 import 'screen/add_user_screen.dart';
 import 'screen/counter_screen.dart';
 import 'screen/future_user_screen.dart';
+import 'screen/start_up_screen.dart';
 import 'screen/stream_user_screen.dart';
 import 'screen/user_list_screen.dart';
 
@@ -23,7 +24,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/stream_user',
+      home: StartUpScreen(
+        flavour: 'dev',
+        builder: (context) {
+          // 這裡可以直接 return 你想要的首頁 widget
+          return const StreamUserScreen();
+        },
+      ),
       routes: {
         '/counter': (context) => const CounterScreen(),
         '/user': (context) => const UserScreen(),
